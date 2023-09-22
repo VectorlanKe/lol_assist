@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="LOL.Assist.App.Views.Controls.DelayTime"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d">
+    <StackPanel Name="DelayTimePanel"
+                Height="21"
+                Orientation="Horizontal">
+        <Label Width="16" 
+               VerticalContentAlignment="Bottom"
+               HorizontalContentAlignment="Right"
+               Content="{Binding Value}" />
+        <Label Content="秒"  
+               VerticalContentAlignment="Bottom"
+               Margin="4,0"/>
+        <Slider Value="{Binding Value}"
+                Maximum="{Binding MaxValue}"
+                Minimum="{Binding MinValue}"
+                Width="95"/>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,112 @@
+﻿<ui:UiWindow x:Class="LOL.Assist.App.Views.SelectHeroWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:models="clr-namespace:LOL.Assist.Core.Models;assembly=LOL.Assist.Core"
+             xmlns:controls="clr-namespace:LOL.Assist.App.Views.Controls"
+             Width="500"
+             Height="480"
+             Background="{ui:ThemeResource ApplicationBackgroundBrush}"
+             WindowStyle="None"
+             ExtendsContentIntoTitleBar="True"
+             WindowBackdropType="Mica"
+             WindowCornerPreference="RoundSmall"
+             WindowStartupLocation="CenterScreen"
+             ResizeMode="NoResize">
+    <ui:UiWindow.Resources>
+        <Style TargetType="RadioButton" BasedOn="{StaticResource {x:Type RadioButton}}">
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Opacity" Value="0.5" />
+            <Setter Property="MinWidth" Value="50" />
+            <Setter Property="Width" Value="50" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Margin" Value="-20,0,0,0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+
+        </Style>
+    </ui:UiWindow.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="60" />
+            <RowDefinition />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+        <ui:TitleBar Grid.Row="0"
+                     Name="NotifyMenuBar"
+                     Title="WPF UI - 测试选择页面"
+                     ForceShutdown="False"
+                     MinimizeToTray="False"
+                     ShowHelp="False"
+                     Padding="10,0,0,0"
+                     ShowClose="True"
+                     ShowMaximize="False"
+                     ShowMinimize="False"
+                     Background="{ui:ThemeResource ApplicationBackgroundBrush}"
+                     Height="30" />
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="200" />
+            </Grid.ColumnDefinitions>
+            <ItemsControl VirtualizingPanel.VirtualizationMode="Recycling"
+                          VirtualizingPanel.ScrollUnit="Pixel"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ItemsSource="{Binding Positions}"
+                          AlternationCount="{Binding Positions.Count}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="5" Rows="1" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:Position}">
+                        <Grid Height="30" Width="30" ClipToBounds="True">
+                            <RadioButton GroupName="HeroPosition"
+                                         Tag="{Binding Portrait}"
+                                         Click="RadioButton_Click"
+                                         Unchecked="RadioButton_Unchecked">
+                                <Image Source="{Binding Image}" />
+                            </RadioButton>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <ui:AutoSuggestBox Grid.Column="1" Width="160"
+                               Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+        <ui:ProgressRing Grid.Row="2" Visibility="{Binding ShowLoading}" IsIndeterminate="True"/>
+        <ItemsControl Grid.Row="2"
+                      Name="HeroItem"
+                      VirtualizingPanel.VirtualizationMode="Recycling"
+                      VirtualizingPanel.ScrollUnit="Pixel"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      ItemsSource="{Binding ShowHeroes}">
+            <ItemsControl.Template>
+                <ControlTemplate TargetType="ItemsControl">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Auto"
+                                  CanContentScroll="True">
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="{Binding ShowHeroColumns}" Rows="{Binding ShowHeroRows}" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:Hero}">
+                    <controls:HeroControl Margin="0,2"
+                                          Tag="{Binding HeroId}"
+                                          Title="{Binding Name}"
+                                          Image="{Binding HeadPortrait}"
+                                          MouseDown="Grid_MouseDown" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+
+</ui:UiWindow>

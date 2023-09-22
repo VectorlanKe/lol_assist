@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="LOL.Assist.App.Views.Controls.HeroControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+    <Grid x:Name="HeroPhotoRoot" Cursor="Hand">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Image Source="{Binding Image}"
+               Height="40"
+               Width="40">
+            <Image.Clip>
+                <RectangleGeometry  
+                    RadiusX="20" 
+                    RadiusY="20" 
+                    Rect="0,0,40,40"/>
+            </Image.Clip>
+        </Image>
+        <Label Grid.Row="1" 
+               FontSize="13"
+               Content="{Binding Title}" 
+               HorizontalAlignment="Center"/>
+    </Grid>
+</UserControl>

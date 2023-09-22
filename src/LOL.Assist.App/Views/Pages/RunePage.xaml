@@ -1,0 +1,167 @@
+﻿<ui:UiPage x:Class="LOL.Assist.App.Views.Pages.RunePage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+           xmlns:model="clr-namespace:LOL.Assist.App.Model"
+           xmlns:models="clr-namespace:LOL.Assist.Core.Models;assembly=LOL.Assist.Core"
+           mc:Ignorable="d"
+           Width="310"
+           Title="RuneGenius">
+    <ui:UiPage.Resources>
+        <Style TargetType="UniformGrid">
+            <Setter Property="Focusable" Value="False" />
+        </Style>
+        <Style TargetType="ItemsControl">
+            <Setter Property="Focusable" Value="False" />
+        </Style>
+        <Style TargetType="ScrollViewer">
+            <Setter Property="Focusable" Value="False" />
+        </Style>
+        <Style TargetType="Border" x:Key="BorderSegStyle">
+            <Style.Triggers>
+                <DataTrigger
+                    Binding="{Binding Path=(ItemsControl.AlternationIndex),RelativeSource={RelativeSource AncestorType={x:Type ContentPresenter}}}"
+                    Value="0">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </ui:UiPage.Resources>
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Label Grid.Column="0"
+               Grid.Row="0"
+               Content="◀ 返回"
+               FontSize="16" VerticalContentAlignment="Center"
+               Cursor="Hand"
+               MouseDown="GetBack_MouseDown" />
+        <ui:AutoSuggestBox
+            Grid.Row="0" Width="160"
+            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            Margin="66,0,84,0" />
+        <Button Grid.Row="0" Content="添加" Margin="238,0,0,0" Click="AddButton_Click" />
+        <ItemsControl Grid.Column="0" Grid.Row="1"
+                      ItemsSource="{Binding HeroRunes}"
+                      AlternationCount="{Binding HeroRunes.Count}">
+            <ItemsControl.Template>
+                <ControlTemplate>
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Auto"
+                                  CanContentScroll="True">
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Focusable="False" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type model:HeroRuneGroup}">
+                    <Grid Height="80" Tag="{Binding HeroRuneBase.ChampionId}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2" />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Border Grid.ColumnSpan="2" Height="1" Background="Black"
+                                Style="{StaticResource BorderSegStyle}" />
+                        <Grid Grid.Column="0"
+                              Grid.Row="1"
+                              Grid.RowSpan="2"
+                              Margin="0,0,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1"/>
+                                <RowDefinition />
+                                <RowDefinition Height="25" />
+                            </Grid.RowDefinitions>
+                            <Image Grid.Row="1"
+                                   Source="{Binding HeroRuneBase.HeadPortrait}"
+                                   Height="50"
+                                   Width="50">
+                                <Image.Clip>
+                                    <RectangleGeometry
+                                        RadiusX="25"
+                                        RadiusY="25"
+                                        Rect="0,0,50,50" />
+                                </Image.Clip>
+                            </Image>
+                            <Label Grid.Row="2"
+                                   FontSize="13"
+                                   Content="{Binding HeroRuneBase.Name}"
+                                   HorizontalAlignment="Center" />
+                            <Label Grid.Row="1"
+                                   Width="50"
+                                   Height="25"
+                                   Margin="0,-20,0,0"
+                                   Padding="0"
+                                   Cursor="Hand"
+                                   HorizontalContentAlignment="Center"
+                                   Tag="{Binding HeroRuneBase.ChampionId}"
+                                   MouseDown="Update_MouseDown"
+                                   Content="修改" />
+                            <Label Grid.Row="1"
+                                   Width="50"
+                                   Height="25"
+                                   Margin="0,30,0,0"
+                                   Padding="0"
+                                   Cursor="Hand"
+                                   HorizontalContentAlignment="Center"
+                                   Tag="{Binding HeroRuneBase.ChampionId}"
+                                   MouseDown="RemoveButton_Click"
+                                   Content="移除" />
+                        </Grid>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="1"
+                                    Orientation="Horizontal">
+                            <ItemsControl ItemsSource="{Binding Primary}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="{Binding Primary.Count}" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type models:RuneResponse}">
+                                        <Image Source="{Binding Icon}"
+                                               Height="32"
+                                               Margin="10,0,0,0" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2"
+                                    Grid.Column="1"
+                                    Orientation="Horizontal">
+                            <ItemsControl ItemsSource="{Binding SecondGrowing}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="{Binding SecondGrowing.Count}" Margin="2,0,0,0" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type models:RuneResponse}">
+                                        <Image Source="{Binding Icon}"
+                                               Height="26"
+                                               Margin="10,0,0,0" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+    </Grid>
+</ui:UiPage>
